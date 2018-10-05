@@ -48,12 +48,14 @@ class TestListCommand(unittest.TestCase):
 
     def clear_run_check(self, args, nums):
         self.clear_run(args)
+        print('=-=-=', args)
+        self.print_lines()
         self.check_lines(nums)
         return
 
     def clear_run_checksize(self, args):
         self.clear_run(args)
-        self.assertEqual(self.listsize, len(self.msgs)-1)
+        self.assertEqual(self.listsize, len(self.msgs))
         return
 
     def test_list_command(self):
@@ -84,11 +86,11 @@ class TestListCommand(unittest.TestCase):
         # List first last
         self.clear_run_check(['list', '10', ',', '20'], list(range(10, 21)))
         # List first count
-        self.clear_run_check(['list', '10', ',',  '5'], list(range(10, 16)))
+        self.clear_run_check(['list', '10', ',',  '5'], list(range(10, 15)))
 
         # Module
         # BUG? without '1' below the default starts with self.listsize+1
-        self.clear_run_check(['os.path', '1'], list(range(1, self.listsize+2)))
+        self.clear_run_check(['os.path', '1'], list(range(1, self.listsize+1)))
 
         # # Function
         # self.clear_run_checksize(['list', 'os.path.join()'])
@@ -99,7 +101,7 @@ class TestListCommand(unittest.TestCase):
 
         # BUG
         # self.clear_run_check(['os.path:1'], range(1, self.listsize+1))
-        self.clear_run_check(['os.path', '10', ',5'], list(range(10, 16)))
+        self.clear_run_check(['os.path', '10', ',', '5'], list(range(10, 16)))
         # Use a file name
 
         if 'APPVEYOR' not in os.environ:
